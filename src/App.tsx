@@ -45,6 +45,16 @@ function App() {
         }
     };
 
+    const handleDelete = async (id) => {
+        try {
+            await deleteUser(id);
+            toast.success("User Deleted!");
+            fetchUsers();
+        } catch (error) {
+            toast.error("Error deleting user");
+        }
+    };
+
     const handleSelectUser = async (id) => {
         try {
             const res = await getUser(id);
