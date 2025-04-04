@@ -1,7 +1,6 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useState , useEffect  } from 'react'
 import './App.css'
+import { createUser, listUsers, getUser, updateUser, deleteUser } from "../src/servicex/userService.ts"
 import {toast, ToastContainer} from "react-toastify";
 
 function App() {
@@ -11,6 +10,14 @@ function App() {
     const [updatedName, setUpdatedName] = useState('');
 
 
+    const fetchUsers = async () => {
+        try {
+            const res = await listUsers();
+            setUsers(res.data);
+        } catch (error) {
+            toast.error("Error fetching users");
+        }
+    };
 
     const handleCreate = async () => {
         try {
@@ -22,17 +29,6 @@ function App() {
             toast.error("Failed to create user");
         }
     };
-
-    const handleSelectUser = async (id) => {
-        try {
-            const res = await getUser(id);
-            setSelectedUser(res.data);
-            setUpdatedName(res.data.name);
-        } catch (error) {
-            toast.error("Error fetching user details");
-        }
-    };
-
     const handleUpdate = async () => {
         if (!selectedUser) return;
         try {
@@ -54,6 +50,10 @@ function App() {
             toast.error("Error deleting user");
         }
     };
+
+    useEffect(() => {
+        fetchUsers();
+    }, []);
 
     const handleSelectUser = async (id) => {
         try {
