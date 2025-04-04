@@ -33,6 +33,18 @@ function App() {
         }
     };
 
+    const handleUpdate = async () => {
+        if (!selectedUser) return;
+        try {
+            await updateUser(selectedUser.id, { name: updatedName });
+            toast.success("User Updated!");
+            setSelectedUser(null);
+            fetchUsers();
+        } catch (error) {
+            toast.error("Failed to update user");
+        }
+    };
+
     const handleSelectUser = async (id) => {
         try {
             const res = await getUser(id);
@@ -71,6 +83,18 @@ function App() {
                   </li>
               ))}
           </ul>
+
+          {selectedUser && (
+              <div>
+                  <h3>Edit User</h3>
+                  <input
+                      type="text"
+                      value={updatedName}
+                      onChange={(e) => setUpdatedName(e.target.value)}
+                  />
+                  <button onClick={handleUpdate}>Update User</button>
+              </div>
+          )}
 
           <ToastContainer/>
       </div>
